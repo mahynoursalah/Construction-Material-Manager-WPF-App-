@@ -1,0 +1,205 @@
+<Window x:Class="ConstructionMaterialManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Construction Material Manager"
+        Height="700"
+        Width="1100"
+        WindowStartupLocation="CenterScreen">
+
+    <DockPanel>
+
+        <!-- Top Menu -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Save" Click="Save_Click"/>
+                <MenuItem Header="Load" Click="Load_Click"/>
+                <Separator/>
+                <MenuItem Header="Exit" Click="Exit_Click"/>
+            </MenuItem>
+
+            <MenuItem Header="Help">
+                <MenuItem Header="About" Click="About_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Bottom StatusBar -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="StatusTextBlock" Text="Ready"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="MaterialsCountTextBlock" Text="Materials: 0"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="v1.0"/>
+            </StatusBarItem>
+        </StatusBar>
+
+        <!-- Main Content -->
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Summary Cards -->
+            <Grid Grid.Row="0" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        BorderBrush="Gray"
+                        BorderThickness="2"
+                        CornerRadius="5"
+                        Padding="10"
+                        Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="CATALOG" FontWeight="Bold" FontSize="16"/>
+                        <TextBlock x:Name="CatalogCountTextBlock"
+                                   Text="0 Materials"
+                                   Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1"
+                        BorderBrush="Gray"
+                        BorderThickness="2"
+                        CornerRadius="5"
+                        Padding="10"
+                        Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="ORDERS" FontWeight="Bold" FontSize="16"/>
+                        <TextBlock x:Name="OrdersCountTextBlock"
+                                   Text="0 Orders"
+                                   Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2"
+                        BorderBrush="Gray"
+                        BorderThickness="2"
+                        CornerRadius="5"
+                        Padding="10"
+                        Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL SPENT" FontWeight="Bold" FontSize="16"/>
+                        <TextBlock x:Name="TotalSpentTextBlock"
+                                   Text="EGP 0"
+                                   Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Add Material Section -->
+            <GroupBox Header="Add Material"
+                      Grid.Row="1"
+                      Margin="0,0,0,10"
+                      Padding="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="5">
+                        <TextBlock Text="Material Name" Margin="0,0,0,5"/>
+                        <TextBox x:Name="NameTextBox" Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="5">
+                        <TextBlock Text="Category" Margin="0,0,0,5"/>
+                        <ComboBox x:Name="CategoryComboBox" Height="30">
+                            <ComboBoxItem Content="Concrete"/>
+                            <ComboBoxItem Content="Steel"/>
+                            <ComboBoxItem Content="Paint"/>
+                            <ComboBoxItem Content="Tiles"/>
+                            <ComboBoxItem Content="General"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Margin="5">
+                        <TextBlock Text="Unit" Margin="0,0,0,5"/>
+                        <ComboBox x:Name="UnitComboBox" Height="30">
+                            <ComboBoxItem Content="Ton"/>
+                            <ComboBoxItem Content="kg"/>
+                            <ComboBoxItem Content="m³"/>
+                            <ComboBoxItem Content="m²"/>
+                            <ComboBoxItem Content="Liter"/>
+                            <ComboBoxItem Content="Piece"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" Margin="5">
+                        <TextBlock Text="Unit Price" Margin="0,0,0,5"/>
+                        <TextBox x:Name="PriceTextBox" Height="30"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="4"
+                            Content="Add Material"
+                            Width="120"
+                            Height="30"
+                            Margin="10,23,5,0"
+                            VerticalAlignment="Top"
+                            Click="AddMaterial_Click"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- Materials DataGrid -->
+            <GroupBox Header="Material Catalog"
+                      Grid.Row="2"
+                      Margin="0,0,0,10"
+                      Padding="10">
+                <DataGrid x:Name="MaterialsDataGrid"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="150"/>
+                        <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" Width="100"/>
+                        <DataGridTextColumn Header="Price/Unit" Binding="{Binding UnitPrice}" Width="150"/>
+                        <DataGridTemplateColumn Header="Delete" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Delete"
+                                            Click="DeleteMaterial_Click"
+                                            Tag="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <!-- Navigation Buttons -->
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button Content="Open Calculator"
+                        Width="150"
+                        Height="35"
+                        Margin="5"
+                        Click="OpenCalculator_Click"/>
+
+                <Button Content="Open Orders"
+                        Width="150"
+                        Height="35"
+                        Margin="5"
+                        Click="OpenOrders_Click"/>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>
